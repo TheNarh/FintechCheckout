@@ -4,7 +4,11 @@ obj/
 
 # Visual Studio
 .vs/
+# Frontend dependencies
+Frontend/node_modules/
 
+# Frontend production build
+Frontend/dist/
 # User-specific files
 *.user
 *.suo
