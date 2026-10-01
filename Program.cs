@@ -11,6 +11,19 @@ builder.Services.Configure<PaystackSettings>(
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=fintech.db"));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactPolicy", policy =>
+    {
+        policy.WithOrigins(
+    "http://localhost:5173",
+    "https://rind-faction-uncooked.ngrok-free.dev"
+)
+.AllowAnyHeader()
+.AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
 
 builder.Services.AddHttpClient<PaystackService>();
@@ -29,6 +42,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapControllers();
+app.UseCors("ReactPolicy");
 
+app.MapControllers();
 app.Run();

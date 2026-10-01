@@ -30,13 +30,14 @@ public class PaystackService
     decimal amount,
     string reference)
 {
-    var payload = new
-    {
-        email = email,
-        amount = (int)(amount * 100),
-        currency = "GHS",
-        reference = reference
-    };
+  var payload = new
+{
+    email = email,
+    amount = (int)(amount * 100),
+    currency = "GHS",
+    reference = reference,
+    callback_url = "https://rind-faction-uncooked.ngrok-free.dev/payment-result"
+};
 
     var json = JsonSerializer.Serialize(payload);
 
