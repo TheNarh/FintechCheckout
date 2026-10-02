@@ -34,6 +34,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     }
 });
 
+if (databaseProvider.Equals(
+    "Postgres",
+    StringComparison.OrdinalIgnoreCase))
+{
+    var postgresConnectionString =
+        $"Host={builder.Configuration["PGHOST"]};" +
+        $"Port={builder.Configuration["PGPORT"]};" +
+        $"Database={builder.Configuration["PGDATABASE"]};" +
+        $"Username={builder.Configuration["PGUSER"]};" +
+        $"Password={builder.Configuration["PGPASSWORD"]};" +
+        $"SSL Mode=Require;" +
+        $"Trust Server Certificate=true";
+
+    builder.Services.AddDbContext<PostgresAppDbContext>(options =>
+        options.UseNpgsql(postgresConnectionString));
+}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactPolicy", policy =>
@@ -55,6 +72,18 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+if (databaseProvider.Equals(
+    "Postgres",
+    StringComparison.OrdinalIgnoreCase))
+{
+    using var scope = app.Services.CreateScope();
+
+    var db = scope.ServiceProvider
+        .GetRequiredService<PostgresAppDbContext>();
+
+    db.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
