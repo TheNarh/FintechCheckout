@@ -52,6 +52,11 @@ function PaymentResult() {
     window.location.href = "/";
   };
 
+  // Print the payment receipt
+  const printReceipt = () => {
+    window.print();
+  };
+
   if (loading) {
     return (
       <div className="result-page">
@@ -210,6 +215,17 @@ function PaymentResult() {
           )}
 
         </div>
+
+        {/* Print receipt button */}
+        {isSuccessful && (
+          <button
+            className="print-receipt-button"
+            onClick={printReceipt}
+          >
+            Print Receipt
+            <span>🖨</span>
+          </button>
+        )}
 
         <button
           className="result-button"
