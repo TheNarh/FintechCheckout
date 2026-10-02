@@ -8,9 +8,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<PaystackSettings>(
     builder.Configuration.GetSection("Paystack"));
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=fintech.db"));
+var connectionString =
+    $"Host={builder.Configuration["PGHOST"]};" +
+    $"Port={builder.Configuration["PGPORT"]};" +
+    $"Database={builder.Configuration["PGDATABASE"]};" +
+    $"Username={builder.Configuration["PGUSER"]};" +
+    $"Password={builder.Configuration["PGPASSWORD"]};" +
+    $"SSL Mode=Require;" +
+    $"Trust Server Certificate=true";
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
+    
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactPolicy", policy =>
