@@ -36,7 +36,7 @@ public class PaystackService
     amount = (int)(amount * 100),
     currency = "GHS",
     reference = reference,
-    callback_url = "https://rind-faction-uncooked.ngrok-free.dev/payment-result"
+    callback_url = "https://fintech-checkout.vercel.app/payment-result"
 };
 
     var json = JsonSerializer.Serialize(payload);
