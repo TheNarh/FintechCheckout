@@ -8,18 +8,32 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<PaystackSettings>(
     builder.Configuration.GetSection("Paystack"));
 
-var connectionString =
-    $"Host={builder.Configuration["PGHOST"]};" +
-    $"Port={builder.Configuration["PGPORT"]};" +
-    $"Database={builder.Configuration["PGDATABASE"]};" +
-    $"Username={builder.Configuration["PGUSER"]};" +
-    $"Password={builder.Configuration["PGPASSWORD"]};" +
-    $"SSL Mode=Require;" +
-    $"Trust Server Certificate=true";
+var databaseProvider =
+    builder.Configuration["Database:Provider"] ?? "Sqlite";
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
-    
+{
+    if (databaseProvider.Equals(
+        "Postgres",
+        StringComparison.OrdinalIgnoreCase))
+    {
+        var connectionString =
+            $"Host={builder.Configuration["PGHOST"]};" +
+            $"Port={builder.Configuration["PGPORT"]};" +
+            $"Database={builder.Configuration["PGDATABASE"]};" +
+            $"Username={builder.Configuration["PGUSER"]};" +
+            $"Password={builder.Configuration["PGPASSWORD"]};" +
+            $"SSL Mode=Require;" +
+            $"Trust Server Certificate=true";
+
+        options.UseNpgsql(connectionString);
+    }
+    else
+    {
+        options.UseSqlite("Data Source=fintech.db");
+    }
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactPolicy", policy =>
