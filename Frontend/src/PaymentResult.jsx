@@ -21,7 +21,7 @@ function PaymentResult() {
     const verifyPayment = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5108/api/checkout/${reference}/verify`
+          `${import.meta.env.VITE_API_BASE_URL}/api/checkout/${reference}/verify`
         );
 
         const data = await response.json();

@@ -16,7 +16,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "http://localhost:5108/api/checkout",
+        `${import.meta.env.VITE_API_BASE_URL}/api/checkout`,
         {
           method: "POST",
           headers: {
