@@ -60,11 +60,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy("ReactPolicy", policy =>
     {
         policy.WithOrigins(
-    "http://localhost:5173",
-    "https://rind-faction-uncooked.ngrok-free.dev"
-)
-.AllowAnyHeader()
-.AllowAnyMethod();
+            "http://localhost:5173",
+            "https://fintech-checkout.vercel.app"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
